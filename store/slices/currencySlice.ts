@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { fetchCryptoPrices } from './portfolioSlice';
+import { fetchTransactions } from './transactionsSlice';
 
 interface CurrencyState {
   rates: Record<string, number>;
@@ -100,6 +102,12 @@ const currencySlice = createSlice({
       })
       .addCase(fetchCurrencyNames.fulfilled, (state, action) => {
         state.currencyNames = action.payload;
+      })
+      .addCase(fetchCryptoPrices.fulfilled, (state) => {
+        state.lastUpdated = new Date().toISOString();
+      })
+      .addCase(fetchTransactions.fulfilled, (state) => {
+        state.lastUpdated = new Date().toISOString();
       });
   },
 });

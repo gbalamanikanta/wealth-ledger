@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { Transaction } from '@/lib/fakerData';
+import { fetchCryptoPrices } from './portfolioSlice';
+import type { RootState } from '../index';
 
 interface TransactionsState {
   items: Transaction[];
@@ -78,6 +80,9 @@ const transactionsSlice = createSlice({
       .addCase(fetchTransactions.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(fetchCryptoPrices.fulfilled, (state) => {
+        state.totalVolume = state.items.reduce((s, t) => s + Math.abs(t.amount), 0);
       });
   },
 });
@@ -86,7 +91,7 @@ export const { addTransaction, setFilter, resetFilters } = transactionsSlice.act
 export default transactionsSlice.reducer;
 
 // Base selectors
-export const selectRawItems = (state: any) => state.transactions.items;
-export const selectFilter = (state: any) => state.transactions.filter;
-export const selectLoading = (state: any) => state.transactions.loading;
-export const selectTotalVolume = (state: any) => state.transactions.totalVolume;
+export const selectRawItems = (state: RootState) => state.transactions.items;
+export const selectFilter = (state: RootState) => state.transactions.filter;
+export const selectLoading = (state: RootState) => state.transactions.loading;
+export const selectTotalVolume = (state: RootState) => state.transactions.totalVolume;

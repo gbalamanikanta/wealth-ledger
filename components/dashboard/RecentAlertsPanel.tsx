@@ -1,30 +1,33 @@
 'use client';
 
-import { useSelector } from 'react-redux';
-import { selectRawItems } from '@/store/selectors/transactionsSelectors';
-import { selectMonthlySpendingLimit, selectAlertThreshold } from '@/store/selectors/settingsSelectors';
-
-const REF_DATE = new Date('2026-05-04T12:00:00Z');
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '@/store';
+import { selectBudgetStatus } from '@/store/selectors/dashboardSelectors';
+import { clearNotifications } from '@/store/slices/notificationsSlice';
+import { selectRecentNotifications } from '@/store/selectors/notificationsSelectors';
+const ALERT_THEME = {
+  info: {
+    icon: 'info',
+    iconClass: 'text-secondary-container',
+  },
+  success: {
+    icon: 'check_circle',
+    iconClass: 'text-on-tertiary-container',
+  },
+  warning: {
+    icon: 'warning',
+    iconClass: 'text-error',
+  },
+  error: {
+    icon: 'error',
+    iconClass: 'text-error',
+  },
+} as const;
 
 export function RecentAlertsPanel({ btcCurrentPrice }: { btcCurrentPrice?: number }) {
-  const transactions = useSelector(selectRawItems);
-  const monthlySpendingLimit = useSelector(selectMonthlySpendingLimit);
-  const alertThreshold = useSelector(selectAlertThreshold);
-
-  const currentMonth = REF_DATE.getUTCMonth();
-  const currentYear = REF_DATE.getUTCFullYear();
-
-  const monthlySpent = transactions
-    .filter((tx: any) => {
-      const d = new Date(tx.date);
-      return d.getMonth() === currentMonth && d.getFullYear() === currentYear && tx.amount < 0;
-    })
-    .reduce((sum: number, tx: any) => sum + Math.abs(tx.amount), 0);
-
-  const spentPct = monthlySpendingLimit > 0
-    ? Math.min(100, (monthlySpent / monthlySpendingLimit) * 100)
-    : 0;
-  const isOverThreshold = spentPct >= alertThreshold;
+  const dispatch = useDispatch<AppDispatch>();
+  const { monthlySpendingLimit, spentPct, isOverThreshold } = useSelector(selectBudgetStatus);
+  const recentNotifications = useSelector(selectRecentNotifications);
 
   return (
     <div
@@ -38,9 +41,13 @@ export function RecentAlertsPanel({ btcCurrentPrice }: { btcCurrentPrice?: numbe
           </span>
           Recent Alerts
         </h3>
-        <span className="text-[10px] font-bold text-on-primary-container cursor-pointer hover:text-secondary">
+        <button
+          type="button"
+          onClick={() => dispatch(clearNotifications())}
+          className="text-[10px] font-bold text-on-primary-container cursor-pointer hover:text-secondary"
+        >
           Clear All
-        </span>
+        </button>
       </div>
 
       <div className="space-y-4">
@@ -79,7 +86,36 @@ export function RecentAlertsPanel({ btcCurrentPrice }: { btcCurrentPrice?: numbe
           </div>
         </div>
 
-        {/* Price Alert: Bitcoin */}
+        {recentNotifications.length === 0 ? (
+          <div className="p-3 bg-surface-container-low rounded-lg border border-outline-variant/30">
+            <div className="flex items-start gap-3">
+              <span className="material-symbols-outlined text-secondary-container text-lg">notifications</span>
+              <div>
+                <p className="text-xs font-bold text-on-surface">No New System Alerts</p>
+                <p className="text-[10px] text-on-surface-variant mt-1">
+                  Pull fresh prices or transactions to generate notifications.
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          recentNotifications.map((notification) => {
+            const theme = ALERT_THEME[notification.type];
+            return (
+              <div key={notification.id} className="p-3 bg-surface-container-low rounded-lg border border-outline-variant/30">
+                <div className="flex items-start gap-3">
+                  <span className={`material-symbols-outlined text-lg ${theme.iconClass}`}>{theme.icon}</span>
+                  <div>
+                    <p className="text-xs font-bold text-on-surface">{notification.title}</p>
+                    <p className="text-[10px] text-on-surface-variant mt-1">{notification.message}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
+
+        {/* Portfolio Rebalance */}
         <div className="p-3 bg-surface-container-low rounded-lg border border-outline-variant/30">
           <div className="flex items-start gap-3">
             <span className="material-symbols-outlined text-on-tertiary-container text-lg">trending_up</span>
@@ -90,19 +126,6 @@ export function RecentAlertsPanel({ btcCurrentPrice }: { btcCurrentPrice?: numbe
               </p>
               <p className="text-[10px] font-bold text-on-tertiary-container mt-1">
                 Current: ${btcCurrentPrice?.toLocaleString('en-US') ?? '64,221'}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Portfolio Rebalance */}
-        <div className="p-3 bg-surface-container-low rounded-lg border border-outline-variant/30">
-          <div className="flex items-start gap-3">
-            <span className="material-symbols-outlined text-secondary-container text-lg">notifications_paused</span>
-            <div>
-              <p className="text-xs font-bold text-on-surface">Portfolio Rebalance</p>
-              <p className="text-[10px] text-on-surface-variant mt-1">
-                Your equity exposure has deviated by 5% from your target allocation.
               </p>
             </div>
           </div>

@@ -83,5 +83,10 @@ export const selectPendingTransactions = createSelector(
   (items: Transaction[]) => items.filter((t: Transaction) => t.status === 'Pending')
 );
 
+// Recent transactions for dashboard widgets
+export const selectRecentTransactions = createSelector([selectRawItems], (items: Transaction[]) =>
+  items.slice(0, 3)
+);
+
 // Re-export base selectors
 export { selectRawItems, selectFilter, selectLoading, selectTotalVolume };

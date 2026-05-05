@@ -1,16 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './slices/authSlice';
 import transactionsReducer from './slices/transactionsSlice';
-import cryptoReducer from './slices/cryptoSlice';
+import portfolioReducer from './slices/portfolioSlice';
 import currencyReducer from './slices/currencySlice';
 import settingsReducer from './slices/settingsSlice';
+import notificationsReducer from './slices/notificationsSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     transactions: transactionsReducer,
-    crypto: cryptoReducer,
+    portfolio: portfolioReducer,
     currency: currencyReducer,
+    notifications: notificationsReducer,
     settings: settingsReducer,
   },
 });

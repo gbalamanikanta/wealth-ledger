@@ -1,32 +1,10 @@
 'use client';
 
 import { useSelector } from 'react-redux';
-import { selectTotalValue } from '@/store/selectors/cryptoSelectors';
-
-const REAL_ESTATE = 5_625_000;
-const EQUITIES = 4_375_000;
-
-const ALLOCATIONS = [
-  { label: 'Real Estate', value: REAL_ESTATE, colorClass: 'bg-tertiary-fixed-dim' },
-  { label: 'Equities',    value: EQUITIES,    colorClass: 'bg-secondary-fixed-dim' },
-];
-
-function diversificationLabel(cryptoPct: number): string {
-  if (cryptoPct > 50) return 'Crypto Heavy';
-  if (cryptoPct > 35) return 'Aggressive';
-  if (cryptoPct > 20) return 'Balanced';
-  return 'Diversified';
-}
+import { selectPortfolioAllocationData } from '@/store/selectors/dashboardSelectors';
 
 export function PortfolioAllocationCard() {
-  const cryptoTotal = useSelector(selectTotalValue);
-
-  const total = REAL_ESTATE + EQUITIES + cryptoTotal;
-
-  const allocations = [
-    ...ALLOCATIONS.map((a) => ({ ...a, pct: (a.value / total) * 100 })),
-    { label: 'Crypto', value: cryptoTotal, pct: (cryptoTotal / total) * 100, colorClass: 'bg-tertiary-fixed' },
-  ];
+  const { allocations, diversificationLabel } = useSelector(selectPortfolioAllocationData);
 
   return (
     <div className="bg-primary-container p-md border border-slate-800 rounded-xl shadow-lg relative overflow-hidden group">
@@ -35,7 +13,7 @@ export function PortfolioAllocationCard() {
           Portfolio Allocation
         </h3>
         <p className="text-white text-stat-lg font-bold mb-4">
-          {diversificationLabel((cryptoTotal / total) * 100)}
+          {diversificationLabel}
         </p>
         <div className="space-y-3">
           {allocations.map(({ label, pct, colorClass }) => (

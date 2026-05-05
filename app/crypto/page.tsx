@@ -10,7 +10,8 @@ import {
   selectChange24h,
   selectNetProfit,
   selectCryptoLoading,
-  selectAssetAllocation,
+  selectDistributionItems,
+  selectBitcoinDistributionPct,
 } from '@/store/selectors/cryptoSelectors';
 import { AppLayout } from '@/components/AppLayout';
 import { CryptoPageHeader } from '@/components/crypto/CryptoPageHeader';
@@ -27,28 +28,12 @@ export default function CryptoPortfolioPage() {
   const change24h = useSelector(selectChange24h);
   const netProfit = useSelector(selectNetProfit);
   const loading = useSelector(selectCryptoLoading);
-  const allocations = useSelector(selectAssetAllocation);
+  const distributionItems = useSelector(selectDistributionItems);
+  const btcPct = useSelector(selectBitcoinDistributionPct);
 
   useEffect(() => {
     dispatch(fetchCryptoPrices());
   }, [dispatch]);
-
-  // Calculate distribution percentages from asset allocation selector
-  const btcAllocation = allocations.find((a: any) => a.id === 'bitcoin');
-  const ethAllocation = allocations.find((a: any) => a.id === 'ethereum');
-  const stableAllocation = allocations.find((a: any) => a.symbol === 'USDC');
-
-  const btcPct = btcAllocation?.percentage ?? '0';
-  const ethPct = ethAllocation?.percentage ?? '0';
-  const stablePct = stableAllocation ? (parseFloat(stableAllocation.percentage)).toFixed(1) : '0';
-  const otherPct = (100 - parseFloat(btcPct) - parseFloat(ethPct) - parseFloat(stablePct)).toFixed(1);
-
-  const distributionItems = [
-    { label: 'Bitcoin', pct: btcPct, color: '#F7931A' },
-    { label: 'Ethereum', pct: ethPct, color: '#627EEA' },
-    { label: 'Stablecoins', pct: stablePct, color: '#2775CA' },
-    { label: 'Others', pct: otherPct, color: '#94a3b8' },
-  ];
 
   return (
     <AppLayout searchPlaceholder="Search assets, transactions, or blocks...">
