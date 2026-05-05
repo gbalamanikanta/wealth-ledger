@@ -1,7 +1,7 @@
 'use client';
 
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import { selectFilteredTransactions, selectLoading } from '@/store/selectors/transactionsSelectors';
 import { AppLayout } from '@/components/AppLayout';
 import { TransactionFilters } from '@/components/transactions/TransactionFilters';
 import { TransactionTable } from '@/components/transactions/TransactionTable';
@@ -35,14 +35,8 @@ function TransactionTableSkeleton() {
 }
 
 export default function TransactionsPage() {
-  const { items, filter, totalVolume, loading } = useSelector((s: RootState) => s.transactions);
-
-  const filteredItems = items.filter((tx) => {
-    if (filter.category !== 'All Categories' && tx.category !== filter.category) return false;
-    if (filter.status !== 'All' && tx.status !== filter.status) return false;
-    if (filter.minAmount && Math.abs(tx.amount) < parseFloat(filter.minAmount)) return false;
-    return true;
-  });
+  const filteredItems = useSelector(selectFilteredTransactions);
+  const loading = useSelector(selectLoading);
 
   return (
     <AppLayout searchPlaceholder="Search transactions...">
@@ -69,7 +63,7 @@ export default function TransactionsPage() {
           </div>
         </div>
 
-        <TransactionSummaryWidgets totalVolume={totalVolume} items={items} />
+        <TransactionSummaryWidgets />
       </div>
     </AppLayout>
   );

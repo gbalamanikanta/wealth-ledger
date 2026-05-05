@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/store';
+import { AppDispatch } from '@/store';
 import { addTransaction } from '@/store/slices/transactionsSlice';
 import { adjustBalance } from '@/store/slices/cryptoSlice';
+import { selectPrices } from '@/store/selectors/cryptoSelectors';
 import { Transaction } from '@/lib/fakerData';
 
 const CATEGORIES = ['Equity Purchase', 'Crypto Transfer', 'Dividend', 'Institutional Fee', 'Fixed Income'];
@@ -30,7 +31,7 @@ const defaultForm = () => ({
 
 export function CreateTransactionForm() {
   const dispatch = useDispatch<AppDispatch>();
-  const cryptoPrices = useSelector((s: RootState) => s.crypto.prices);
+  const cryptoPrices = useSelector(selectPrices);
   const [form, setForm] = useState(defaultForm);
 
   const isCrypto = form.category === 'Crypto Transfer';

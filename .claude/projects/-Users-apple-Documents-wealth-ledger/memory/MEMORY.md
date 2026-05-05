@@ -1,0 +1,1 @@
+- [Redux Selectors Implementation](project_redux_selectors.md) — Memoized selectors for performance optimization

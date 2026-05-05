@@ -1,16 +1,23 @@
 'use client';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '@/store';
+import { AppDispatch } from '@/store';
 import {
   setMonthlySpendingLimit,
   setInvestmentThreshold,
   setAlertThreshold,
 } from '@/store/slices/settingsSlice';
+import {
+  selectMonthlySpendingLimit,
+  selectInvestmentThreshold,
+  selectAlertThreshold,
+} from '@/store/selectors/settingsSelectors';
 
 export function BudgetingAlertsCard() {
   const dispatch = useDispatch<AppDispatch>();
-  const settings = useSelector((s: RootState) => s.settings);
+  const monthlySpendingLimit = useSelector(selectMonthlySpendingLimit);
+  const investmentThreshold = useSelector(selectInvestmentThreshold);
+  const alertThreshold = useSelector(selectAlertThreshold);
 
   return (
     <div
@@ -29,7 +36,7 @@ export function BudgetingAlertsCard() {
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">$</span>
               <input
                 type="number"
-                value={settings.monthlySpendingLimit}
+                value={monthlySpendingLimit}
                 onChange={(e) => dispatch(setMonthlySpendingLimit(Number(e.target.value)))}
                 className="w-full pl-8 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
               />
@@ -41,7 +48,7 @@ export function BudgetingAlertsCard() {
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">$</span>
               <input
                 type="number"
-                value={settings.investmentThreshold}
+                value={investmentThreshold}
                 onChange={(e) => dispatch(setInvestmentThreshold(Number(e.target.value)))}
                 className="w-full pl-8 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
               />
@@ -52,21 +59,21 @@ export function BudgetingAlertsCard() {
           <div className="flex items-center justify-between">
             <label className="text-label-lg font-medium text-on-surface">Alert Threshold</label>
             <span className="px-3 py-1 bg-secondary-fixed text-on-secondary-fixed rounded-full text-label-sm font-semibold">
-              {settings.alertThreshold}% of limit
+              {alertThreshold}% of limit
             </span>
           </div>
           <div className="relative pt-1">
             <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
               <div
                 className="h-full bg-secondary rounded-full"
-                style={{ width: `${settings.alertThreshold}%` }}
+                style={{ width: `${alertThreshold}%` }}
               />
             </div>
             <input
               type="range"
               min="0"
               max="100"
-              value={settings.alertThreshold}
+              value={alertThreshold}
               onChange={(e) => dispatch(setAlertThreshold(Number(e.target.value)))}
               className="absolute inset-0 w-full opacity-0 cursor-pointer"
             />

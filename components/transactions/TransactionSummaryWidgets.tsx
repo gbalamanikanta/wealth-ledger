@@ -1,18 +1,14 @@
 'use client';
 
-import { Transaction } from '@/lib/fakerData';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+import { selectTransactionSummary, selectTotalVolume } from '@/store/selectors/transactionsSelectors';
 import { useCurrencyFormat } from '@/lib/useCurrencyFormat';
 
-interface TransactionSummaryWidgetsProps {
-  totalVolume: number;
-  items: Transaction[];
-}
-
-export function TransactionSummaryWidgets({ totalVolume, items }: TransactionSummaryWidgetsProps) {
+export function TransactionSummaryWidgets() {
   const { format, formatCompact } = useCurrencyFormat();
-
-  const totalIn = items.filter((t) => t.amount > 0).reduce((s, t) => s + t.amount, 0);
-  const totalOut = Math.abs(items.filter((t) => t.amount < 0).reduce((s, t) => s + t.amount, 0));
+  const totalVolume = useSelector(selectTotalVolume);
+  const { incoming: totalIn, outgoing: totalOut } = useSelector(selectTransactionSummary);
 
   return (
     <section className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6">

@@ -118,3 +118,13 @@ const cryptoSlice = createSlice({
 
 export const { adjustBalance } = cryptoSlice.actions;
 export default cryptoSlice.reducer;
+
+// Base selectors
+export const selectAssets = (state: any) => state.crypto.assets;
+export const selectPrices = (state: any) => state.crypto.prices;
+export const selectBalances = (state: any) => state.crypto.balances;
+export const selectTotalValue = (state: any) => state.crypto.totalValue;
+export const selectChange24h = (state: any) => state.crypto.change24h;
+export const selectNetProfit = (state: any) => state.crypto.netProfit;
+export const selectCryptoLoading = (state: any) => state.crypto.loading;
+export const selectCryptoError = (state: any) => state.crypto.error;

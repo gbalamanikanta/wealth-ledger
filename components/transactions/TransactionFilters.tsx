@@ -1,15 +1,16 @@
 'use client';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '@/store';
+import { AppDispatch } from '@/store';
 import { setFilter, resetFilters } from '@/store/slices/transactionsSlice';
+import { selectFilter } from '@/store/selectors/transactionsSelectors';
 
 const CATEGORIES = ['All Categories', 'Equity Purchase', 'Crypto Transfer', 'Dividend', 'Institutional Fee', 'Fixed Income'];
 const STATUSES = ['All', 'Settled', 'Pending', 'Processing'];
 
 export function TransactionFilters() {
   const dispatch = useDispatch<AppDispatch>();
-  const filter = useSelector((s: RootState) => s.transactions.filter);
+  const filter = useSelector(selectFilter);
 
   return (
     <section className="bg-white border border-slate-200 rounded-xl shadow-sm p-6 mb-8">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import { selectTotalValue } from '@/store/selectors/cryptoSelectors';
 
 const REAL_ESTATE = 5_625_000;
 const EQUITIES = 4_375_000;
@@ -19,7 +19,7 @@ function diversificationLabel(cryptoPct: number): string {
 }
 
 export function PortfolioAllocationCard() {
-  const cryptoTotal = useSelector((s: RootState) => s.crypto.totalValue);
+  const cryptoTotal = useSelector(selectTotalValue);
 
   const total = REAL_ESTATE + EQUITIES + cryptoTotal;
 

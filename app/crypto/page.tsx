@@ -2,8 +2,16 @@
 
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '@/store';
+import { AppDispatch } from '@/store';
 import { fetchCryptoPrices } from '@/store/slices/cryptoSlice';
+import {
+  selectAssets,
+  selectTotalValue,
+  selectChange24h,
+  selectNetProfit,
+  selectCryptoLoading,
+  selectAssetAllocation,
+} from '@/store/selectors/cryptoSelectors';
 import { AppLayout } from '@/components/AppLayout';
 import { CryptoPageHeader } from '@/components/crypto/CryptoPageHeader';
 import { PortfolioValueCard } from '@/components/crypto/PortfolioValueCard';
@@ -14,21 +22,26 @@ import { PortfolioInsightsCard } from '@/components/crypto/PortfolioInsightsCard
 
 export default function CryptoPortfolioPage() {
   const dispatch = useDispatch<AppDispatch>();
-  const { assets, totalValue, change24h, netProfit, loading } = useSelector((s: RootState) => s.crypto);
+  const assets = useSelector(selectAssets);
+  const totalValue = useSelector(selectTotalValue);
+  const change24h = useSelector(selectChange24h);
+  const netProfit = useSelector(selectNetProfit);
+  const loading = useSelector(selectCryptoLoading);
+  const allocations = useSelector(selectAssetAllocation);
 
   useEffect(() => {
     dispatch(fetchCryptoPrices());
   }, [dispatch]);
 
-  const btcValue = assets.find((a) => a.id === 'bitcoin')?.value ?? 0;
-  const ethValue = assets.find((a) => a.id === 'ethereum')?.value ?? 0;
-  const stableValue = assets.filter((a) => a.symbol === 'USDC').reduce((s, a) => s + a.value, 0);
-  const otherValue = totalValue - btcValue - ethValue - stableValue;
+  // Calculate distribution percentages from asset allocation selector
+  const btcAllocation = allocations.find((a: any) => a.id === 'bitcoin');
+  const ethAllocation = allocations.find((a: any) => a.id === 'ethereum');
+  const stableAllocation = allocations.find((a: any) => a.symbol === 'USDC');
 
-  const btcPct = totalValue ? ((btcValue / totalValue) * 100).toFixed(1) : '0';
-  const ethPct = totalValue ? ((ethValue / totalValue) * 100).toFixed(1) : '0';
-  const stablePct = totalValue ? ((stableValue / totalValue) * 100).toFixed(1) : '0';
-  const otherPct = totalValue ? ((Math.max(0, otherValue) / totalValue) * 100).toFixed(1) : '0';
+  const btcPct = btcAllocation?.percentage ?? '0';
+  const ethPct = ethAllocation?.percentage ?? '0';
+  const stablePct = stableAllocation ? (parseFloat(stableAllocation.percentage)).toFixed(1) : '0';
+  const otherPct = (100 - parseFloat(btcPct) - parseFloat(ethPct) - parseFloat(stablePct)).toFixed(1);
 
   const distributionItems = [
     { label: 'Bitcoin', pct: btcPct, color: '#F7931A' },

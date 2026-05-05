@@ -1,7 +1,7 @@
 'use client';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '@/store';
+import { AppDispatch, RootState } from '@/store';
 import { updateProfile } from '@/store/slices/authSlice';
 
 export function ProfileSettingsCard() {

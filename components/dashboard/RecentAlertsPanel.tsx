@@ -1,23 +1,25 @@
 'use client';
 
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import { selectRawItems } from '@/store/selectors/transactionsSelectors';
+import { selectMonthlySpendingLimit, selectAlertThreshold } from '@/store/selectors/settingsSelectors';
 
 const REF_DATE = new Date('2026-05-04T12:00:00Z');
 
 export function RecentAlertsPanel({ btcCurrentPrice }: { btcCurrentPrice?: number }) {
-  const transactions = useSelector((s: RootState) => s.transactions.items);
-  const { monthlySpendingLimit, alertThreshold } = useSelector((s: RootState) => s.settings);
+  const transactions = useSelector(selectRawItems);
+  const monthlySpendingLimit = useSelector(selectMonthlySpendingLimit);
+  const alertThreshold = useSelector(selectAlertThreshold);
 
   const currentMonth = REF_DATE.getUTCMonth();
   const currentYear = REF_DATE.getUTCFullYear();
 
   const monthlySpent = transactions
-    .filter((tx) => {
+    .filter((tx: any) => {
       const d = new Date(tx.date);
       return d.getMonth() === currentMonth && d.getFullYear() === currentYear && tx.amount < 0;
     })
-    .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+    .reduce((sum: number, tx: any) => sum + Math.abs(tx.amount), 0);
 
   const spentPct = monthlySpendingLimit > 0
     ? Math.min(100, (monthlySpent / monthlySpendingLimit) * 100)

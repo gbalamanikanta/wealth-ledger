@@ -2,8 +2,10 @@
 
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '@/store';
+import { AppDispatch } from '@/store';
 import { fetchCryptoPrices } from '@/store/slices/cryptoSlice';
+import { selectAssets, selectCryptoLoading } from '@/store/selectors/cryptoSelectors';
+import { selectRawItems } from '@/store/selectors/transactionsSelectors';
 import { AppLayout } from '@/components/AppLayout';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { NetWorthCard } from '@/components/dashboard/NetWorthCard';
@@ -15,15 +17,16 @@ import { PortfolioAllocationCard } from '@/components/dashboard/PortfolioAllocat
 
 export default function DashboardPage() {
   const dispatch = useDispatch<AppDispatch>();
-  const transactions = useSelector((s: RootState) => s.transactions.items);
-  const crypto = useSelector((s: RootState) => s.crypto);
+  const transactions = useSelector(selectRawItems);
+  const assets = useSelector(selectAssets);
+  const loading = useSelector(selectCryptoLoading);
 
   useEffect(() => {
     dispatch(fetchCryptoPrices());
   }, [dispatch]);
 
   const recentTx = transactions.slice(0, 3);
-  const displayAssets = crypto.assets.filter((a) =>
+  const displayAssets = assets.filter((a: any) =>
     ['bitcoin', 'ethereum', 'usd-coin'].includes(a.id)
   );
 
@@ -52,14 +55,14 @@ export default function DashboardPage() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2">
                 <RecentTransactionsList transactions={recentTx} />
-                <CryptoAssetsList assets={displayAssets} loading={crypto.loading} />
+                <CryptoAssetsList assets={displayAssets} loading={loading} />
               </div>
             </div>
           </div>
 
           {/* Right Panel: 4 Columns */}
           <aside className="col-span-12 lg:col-span-4 space-y-gutter">
-            <RecentAlertsPanel btcCurrentPrice={crypto.assets.find((a) => a.id === 'bitcoin')?.currentPrice} />
+            <RecentAlertsPanel btcCurrentPrice={assets.find((a: any) => a.id === 'bitcoin')?.currentPrice} />
             <PortfolioAllocationCard />
           </aside>
 

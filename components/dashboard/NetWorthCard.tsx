@@ -1,22 +1,19 @@
 'use client';
 
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import { selectTotalValue } from '@/store/selectors/cryptoSelectors';
+import { selectRawItems, selectTransactionSummary } from '@/store/selectors/transactionsSelectors';
 import { useCurrencyFormat } from '@/lib/useCurrencyFormat';
 
 const BASE_ASSETS = 10_000_000;
 
 export function NetWorthCard() {
   const { format, formatCompact } = useCurrencyFormat();
-  const cryptoTotal = useSelector((s: RootState) => s.crypto.totalValue);
-  const transactions = useSelector((s: RootState) => s.transactions.items);
+  const cryptoTotal = useSelector(selectTotalValue);
+  const transactions = useSelector(selectRawItems);
+  const { incoming: liquidCapital, net: transactionNet } = useSelector(selectTransactionSummary);
 
-  const transactionNet = transactions.reduce((sum, tx) => sum + tx.amount, 0);
   const netWorth = BASE_ASSETS + cryptoTotal + transactionNet;
-
-  const liquidCapital = transactions
-    .filter((tx) => tx.amount > 0)
-    .reduce((sum, tx) => sum + tx.amount, 0);
   const liquidPct = netWorth > 0 ? Math.min(100, (liquidCapital / netWorth) * 100) : 0;
 
   return (

@@ -1,12 +1,15 @@
 'use client';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '@/store';
+import { AppDispatch } from '@/store';
 import { setPrimaryCurrency, setLanguage, toggleDarkMode } from '@/store/slices/settingsSlice';
+import { selectPrimaryCurrency, selectLanguage, selectDarkMode } from '@/store/selectors/settingsSelectors';
 
 export function PreferencesCard() {
   const dispatch = useDispatch<AppDispatch>();
-  const settings = useSelector((s: RootState) => s.settings);
+  const primaryCurrency = useSelector(selectPrimaryCurrency);
+  const language = useSelector(selectLanguage);
+  const darkMode = useSelector(selectDarkMode);
 
   return (
     <div
@@ -21,7 +24,7 @@ export function PreferencesCard() {
         <div className="space-y-2">
           <label className="text-label-sm font-semibold text-slate-500">Primary Currency</label>
           <select
-            value={settings.primaryCurrency}
+            value={primaryCurrency}
             onChange={(e) => dispatch(setPrimaryCurrency(e.target.value))}
             className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all appearance-none"
           >
@@ -35,7 +38,7 @@ export function PreferencesCard() {
         <div className="space-y-2">
           <label className="text-label-sm font-semibold text-slate-500">Language</label>
           <select
-            value={settings.language}
+            value={language}
             onChange={(e) => dispatch(setLanguage(e.target.value))}
             className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all appearance-none"
           >
@@ -48,13 +51,13 @@ export function PreferencesCard() {
           <span className="text-label-lg font-medium text-on-surface">Dark Mode</span>
           <div
             className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors ${
-              settings.darkMode ? 'bg-secondary' : 'bg-slate-200'
+              darkMode ? 'bg-secondary' : 'bg-slate-200'
             }`}
             onClick={() => dispatch(toggleDarkMode())}
           >
             <div
               className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm transition-all ${
-                settings.darkMode ? 'left-7' : 'left-1'
+                darkMode ? 'left-7' : 'left-1'
               }`}
             />
           </div>

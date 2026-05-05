@@ -1,12 +1,13 @@
 'use client';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '@/store';
+import { AppDispatch } from '@/store';
 import { toggleTwoFactor } from '@/store/slices/settingsSlice';
+import { selectTwoFactorEnabled } from '@/store/selectors/settingsSelectors';
 
 export function SecurityCard() {
   const dispatch = useDispatch<AppDispatch>();
-  const twoFactorEnabled = useSelector((s: RootState) => s.settings.twoFactorEnabled);
+  const twoFactorEnabled = useSelector(selectTwoFactorEnabled);
 
   return (
     <div

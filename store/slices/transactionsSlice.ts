@@ -84,3 +84,9 @@ const transactionsSlice = createSlice({
 
 export const { addTransaction, setFilter, resetFilters } = transactionsSlice.actions;
 export default transactionsSlice.reducer;
+
+// Base selectors
+export const selectRawItems = (state: any) => state.transactions.items;
+export const selectFilter = (state: any) => state.transactions.filter;
+export const selectLoading = (state: any) => state.transactions.loading;
+export const selectTotalVolume = (state: any) => state.transactions.totalVolume;
