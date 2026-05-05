@@ -1,0 +1,164 @@
+'use client';
+
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { login } from '@/store/slices/authSlice';
+import { AppDispatch } from '@/store';
+
+export default function LoginPage() {
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setTimeout(() => {
+      dispatch(login({ email, password }));
+      router.push('/dashboard');
+    }, 600);
+  };
+
+  return (
+    <div className="flex items-center justify-center min-h-screen p-md text-on-surface relative overflow-hidden">
+      {/* Background decorative blobs */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-[10%] -left-[5%] w-[40%] h-[40%] bg-surface-container blur-[120px] rounded-full opacity-50"></div>
+        <div className="absolute -bottom-[10%] -right-[5%] w-[40%] h-[40%] bg-secondary-fixed-dim blur-[120px] rounded-full opacity-30"></div>
+      </div>
+
+      <div className="w-full max-w-[440px]">
+        {/* Brand Identity */}
+        <div className="text-center mb-lg">
+          <div className="inline-flex items-center justify-center p-sm bg-secondary-container rounded-xl mb-md">
+            <span className="material-symbols-outlined text-on-secondary-container" style={{ fontSize: '32px' }}>
+              account_balance
+            </span>
+          </div>
+          <h1 className="text-headline-lg font-semibold text-on-surface mb-xs">WealthLedger</h1>
+          <p className="text-label-lg font-medium text-on-primary-container">
+            Institutional Private Wealth Management
+          </p>
+        </div>
+
+        {/* Login Card */}
+        <div
+          className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg"
+          style={{ boxShadow: '0 4px 6px -1px rgba(15,23,42,0.05), 0 2px 4px -2px rgba(15,23,42,0.05)' }}
+        >
+          <div className="mb-md">
+            <h2 className="text-headline-md font-semibold text-on-surface">Sign In</h2>
+            <p className="text-body-md text-on-surface-variant">Enter your credentials to access your portal</p>
+          </div>
+
+          <form className="space-y-md" onSubmit={handleSubmit}>
+            {/* Email Field */}
+            <div className="space-y-xs">
+              <label className="block text-label-lg font-medium text-on-surface" htmlFor="email">
+                Username or Email
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-md flex items-center pointer-events-none">
+                  <span className="material-symbols-outlined text-outline" style={{ fontSize: '20px' }}>
+                    mail
+                  </span>
+                </div>
+                <input
+                  id="email"
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@wealthledger.com"
+                  className="block w-full pl-xl pr-md py-sm bg-surface-container-low border border-outline-variant rounded-lg text-body-md text-on-surface placeholder-on-primary-container focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Password Field */}
+            <div className="space-y-xs">
+              <div className="flex justify-between items-center">
+                <label className="block text-label-lg font-medium text-on-surface" htmlFor="password">
+                  Password
+                </label>
+                <a className="text-label-sm font-semibold text-secondary hover:underline transition-all" href="#">
+                  Forgot password?
+                </a>
+              </div>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-md flex items-center pointer-events-none">
+                  <span className="material-symbols-outlined text-outline" style={{ fontSize: '20px' }}>
+                    lock
+                  </span>
+                </div>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="block w-full pl-xl pr-md py-sm bg-surface-container-low border border-outline-variant rounded-lg text-body-md text-on-surface placeholder-on-primary-container focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Remember Me */}
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                type="checkbox"
+                checked={remember}
+                onChange={(e) => setRemember(e.target.checked)}
+                className="h-4 w-4 rounded border-outline-variant text-secondary focus:ring-secondary"
+              />
+              <label
+                htmlFor="remember-me"
+                className="ml-sm block text-label-sm font-semibold text-on-surface-variant"
+              >
+                Remember this device for 30 days
+              </label>
+            </div>
+
+            {/* Sign In Button */}
+            <div className="pt-sm">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full h-[48px] bg-secondary text-on-secondary rounded-lg text-label-lg font-medium hover:bg-secondary/90 active:scale-[0.98] transition-all flex items-center justify-center gap-sm disabled:opacity-70"
+              >
+                {loading ? 'Signing In...' : 'Sign In'}
+                {!loading && (
+                  <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>
+                    arrow_forward
+                  </span>
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-lg text-center">
+          <p className="text-body-md text-on-surface-variant">
+            Confidential system access.{' '}
+            <a className="text-secondary text-label-lg font-medium ml-xs hover:underline" href="#">
+              Support Center
+            </a>
+          </p>
+          <p className="mt-sm text-body-md text-on-surface-variant">
+            New to WealthLedger?{' '}
+            <Link className="text-secondary font-semibold ml-xs hover:underline" href="/register">
+              Create Account
+            </Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
