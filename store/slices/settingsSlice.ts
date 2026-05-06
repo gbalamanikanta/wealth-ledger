@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+function loadStoredCurrency(): string {
+  if (typeof window === 'undefined') return 'USD';
+  return localStorage.getItem('wealth-ledger:currency') ?? 'USD';
+}
+
 interface SettingsState {
   primaryCurrency: string;
   language: string;
@@ -11,7 +16,7 @@ interface SettingsState {
 }
 
 const initialState: SettingsState = {
-  primaryCurrency: 'USD',
+  primaryCurrency: loadStoredCurrency(),
   language: 'EN',
   darkMode: false,
   monthlySpendingLimit: 12500,

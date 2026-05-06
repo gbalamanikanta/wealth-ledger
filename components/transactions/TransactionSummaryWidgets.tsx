@@ -41,7 +41,7 @@ export function TransactionSummaryWidgets() {
           </div>
         </div>
         <div className="absolute -right-10 -bottom-10 opacity-10 group-hover:scale-110 transition-transform duration-500">
-          <span className="material-symbols-outlined" style={{ fontSize: '160px' }}>account_balance_wallet</span>
+          <span className="material-symbols-outlined text-[160px]">account_balance_wallet</span>
         </div>
       </div>
 

@@ -1,14 +1,17 @@
 'use client';
 
-import { Transaction } from '@/lib/fakerData';
+import { useSelector } from 'react-redux';
+import { selectRecentTransactions } from '@/store/selectors/transactionsSelectors';
 import { useCurrencyFormat } from '@/lib/useCurrencyFormat';
 
-interface RecentTransactionsListProps {
-  transactions: Transaction[];
-}
+const CATEGORY_ICONS: Record<string, string> = {
+  'Crypto Transfer': 'currency_bitcoin',
+  'Dividend': 'account_balance',
+};
 
-export function RecentTransactionsList({ transactions }: RecentTransactionsListProps) {
+export function RecentTransactionsList() {
   const { format } = useCurrencyFormat();
+  const transactions = useSelector(selectRecentTransactions);
 
   return (
     <div className="p-md border-r border-outline-variant">
@@ -22,12 +25,7 @@ export function RecentTransactionsList({ transactions }: RecentTransactionsListP
       <div className="space-y-3">
         {transactions.map((tx) => {
           const isPositive = tx.amount > 0;
-          const icon =
-            tx.category === 'Crypto Transfer'
-              ? 'currency_bitcoin'
-              : tx.category === 'Dividend'
-              ? 'account_balance'
-              : 'shopping_cart';
+          const icon = CATEGORY_ICONS[tx.category] ?? 'shopping_cart';
           return (
             <div
               key={tx.id}

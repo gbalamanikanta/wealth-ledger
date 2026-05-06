@@ -10,8 +10,7 @@ export function NetWorthChart() {
 
   return (
     <div
-      className="md:col-span-2 bg-surface-container-lowest p-md border border-outline-variant rounded-xl relative overflow-hidden"
-      style={{ boxShadow: '0 4px 6px -1px rgba(15,23,42,0.05), 0 2px 4px -2px rgba(15,23,42,0.05)' }}
+      className="md:col-span-2 bg-surface-container-lowest p-md border border-outline-variant rounded-xl relative overflow-hidden card-shadow"
     >
       <div className="flex justify-between items-center mb-md">
         <h3 className="text-label-lg font-medium text-on-surface">Net Worth Over Time</h3>
@@ -35,11 +34,11 @@ export function NetWorthChart() {
         {BAR_HEIGHTS.map((h, i) => (
           <div
             key={i}
-            className="w-full rounded-t-sm"
+            className="w-full rounded-t-sm [height:var(--bar-h)] [background:var(--bar-bg)]"
             style={{
-              height: `${h * 4}px`,
-              background: `linear-gradient(to top, #e5eeff, rgba(49,107,243,${0.2 + i * 0.15}))`,
-            }}
+              '--bar-h': `${h * 4}px`,
+              '--bar-bg': `linear-gradient(to top, #e5eeff, rgba(49,107,243,${(0.2 + i * 0.15).toFixed(2)}))`,
+            } as React.CSSProperties}
           />
         ))}
       </div>

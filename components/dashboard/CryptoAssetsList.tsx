@@ -1,15 +1,13 @@
 'use client';
 
-import { CryptoAsset } from '@/store/slices/cryptoSlice';
+import { useSelector } from 'react-redux';
+import { selectDashboardDisplayAssets, selectCryptoLoading } from '@/store/selectors/cryptoSelectors';
 import { useCurrencyFormat } from '@/lib/useCurrencyFormat';
 
-interface CryptoAssetsListProps {
-  assets: CryptoAsset[];
-  loading: boolean;
-}
-
-export function CryptoAssetsList({ assets, loading }: CryptoAssetsListProps) {
+export function CryptoAssetsList() {
   const { format } = useCurrencyFormat();
+  const assets = useSelector(selectDashboardDisplayAssets);
+  const loading = useSelector(selectCryptoLoading);
 
   return (
     <div className="p-md bg-slate-50/50">
@@ -30,10 +28,10 @@ export function CryptoAssetsList({ assets, loading }: CryptoAssetsListProps) {
           >
             <div className="flex items-center gap-3">
               <div
-                className="w-8 h-8 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: asset.color + '20' }}
+                className="w-8 h-8 rounded-full flex items-center justify-center [background-color:var(--icon-bg)]"
+                style={{ '--icon-bg': asset.color + '20' } as React.CSSProperties}
               >
-                <span className="material-symbols-outlined text-sm" style={{ color: asset.color }}>
+                <span className="material-symbols-outlined text-sm [color:var(--icon-color)]" style={{ '--icon-color': asset.color } as React.CSSProperties}>
                   {asset.icon}
                 </span>
               </div>

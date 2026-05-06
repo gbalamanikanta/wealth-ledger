@@ -1,15 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store';
-import { fetchCryptoPrices } from '@/store/slices/cryptoSlice';
-import {
-  selectDashboardDisplayAssets,
-  selectCryptoLoading,
-  selectBitcoinCurrentPrice,
-} from '@/store/selectors/cryptoSelectors';
-import { selectRecentTransactions } from '@/store/selectors/transactionsSelectors';
+import { usePricePoll } from '@/lib/usePricePoll';
 import { AppLayout } from '@/components/AppLayout';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { NetWorthCard } from '@/components/dashboard/NetWorthCard';
@@ -20,15 +13,7 @@ import { RecentAlertsPanel } from '@/components/dashboard/RecentAlertsPanel';
 import { PortfolioAllocationCard } from '@/components/dashboard/PortfolioAllocationCard';
 
 export default function DashboardPage() {
-  const dispatch = useDispatch<AppDispatch>();
-  const recentTx = useSelector(selectRecentTransactions);
-  const displayAssets = useSelector(selectDashboardDisplayAssets);
-  const loading = useSelector(selectCryptoLoading);
-  const bitcoinCurrentPrice = useSelector(selectBitcoinCurrentPrice);
-
-  useEffect(() => {
-    dispatch(fetchCryptoPrices());
-  }, [dispatch]);
+  usePricePoll();
 
   return (
     <AppLayout searchPlaceholder="Search wealth data...">
@@ -47,22 +32,21 @@ export default function DashboardPage() {
 
             {/* Financial Summary */}
             <div
-              className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden"
-              style={{ boxShadow: '0 4px 6px -1px rgba(15,23,42,0.05), 0 2px 4px -2px rgba(15,23,42,0.05)' }}
+              className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden card-shadow"
             >
               <div className="p-md border-b border-outline-variant">
                 <h3 className="text-headline-md font-semibold text-on-surface">Financial Summary</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2">
-                <RecentTransactionsList transactions={recentTx} />
-                <CryptoAssetsList assets={displayAssets} loading={loading} />
+                <RecentTransactionsList />
+                <CryptoAssetsList />
               </div>
             </div>
           </div>
 
           {/* Right Panel: 4 Columns */}
           <aside className="col-span-12 lg:col-span-4 space-y-gutter">
-            <RecentAlertsPanel btcCurrentPrice={bitcoinCurrentPrice} />
+            <RecentAlertsPanel />
             <PortfolioAllocationCard />
           </aside>
 

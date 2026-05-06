@@ -10,8 +10,7 @@ export function NetWorthCard() {
 
   return (
     <div
-      className="md:col-span-1 bg-surface-container-lowest p-md border border-outline-variant rounded-xl"
-      style={{ boxShadow: '0 4px 6px -1px rgba(15,23,42,0.05), 0 2px 4px -2px rgba(15,23,42,0.05)' }}
+      className="md:col-span-1 bg-surface-container-lowest p-md border border-outline-variant rounded-xl card-shadow"
     >
       <div className="flex justify-between items-start mb-sm">
         <span className="text-on-primary-container text-label-lg font-medium uppercase tracking-tight">
@@ -35,8 +34,8 @@ export function NetWorthCard() {
         </div>
         <div className="w-full bg-surface-container rounded-full h-1.5">
           <div
-            className="bg-secondary-container h-1.5 rounded-full transition-all"
-            style={{ width: `${liquidPct.toFixed(1)}%` }}
+            className="bg-secondary-container h-1.5 rounded-full transition-all [width:var(--w)]"
+            style={{ '--w': `${liquidPct.toFixed(1)}%` } as React.CSSProperties}
           />
         </div>
       </div>

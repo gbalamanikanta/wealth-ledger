@@ -1,34 +1,36 @@
 'use client';
 
-import { CryptoAsset } from '@/store/slices/cryptoSlice';
+import { useSelector } from 'react-redux';
+import {
+  selectTotalValue,
+  selectChange24h,
+  selectNetProfit,
+  selectCryptoLoading,
+  selectPrimaryHoldingBalances,
+} from '@/store/selectors/cryptoSelectors';
 import { useCurrencyFormat } from '@/lib/useCurrencyFormat';
 
-interface PortfolioValueCardProps {
-  totalValue: number;
-  change24h: number;
-  netProfit: number;
-  assets: CryptoAsset[];
-  loading: boolean;
-}
-
-export function PortfolioValueCard({ totalValue, change24h, netProfit, assets, loading }: PortfolioValueCardProps) {
+export function PortfolioValueCard() {
   const { format } = useCurrencyFormat();
-  const btc = assets.find((a) => a.id === 'bitcoin');
-  const eth = assets.find((a) => a.id === 'ethereum');
+  const totalValue = useSelector(selectTotalValue);
+  const change24h = useSelector(selectChange24h);
+  const netProfit = useSelector(selectNetProfit);
+  const loading = useSelector(selectCryptoLoading);
+  const { bitcoinBalance, ethereumBalance } = useSelector(selectPrimaryHoldingBalances);
 
   return (
     <div className="md:col-span-4 bg-white p-md border border-slate-200 rounded-xl card-shadow">
       <div className="flex justify-between items-start mb-4">
         <p className="text-label-lg font-medium text-on-primary-container">Total Portfolio Value</p>
         <div className="bg-tertiary-fixed text-on-tertiary-fixed-variant px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1">
-          <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>trending_up</span>
+          <span className="material-symbols-outlined text-[12px]">trending_up</span>
           {loading ? '...' : '+12.4%'}
         </div>
       </div>
 
       <p className="text-stat-lg font-bold text-on-surface">{format(totalValue)}</p>
       <p className="text-xs text-slate-400 mt-1">
-        ~ {btc?.balance.toFixed(2)} BTC / {eth?.balance.toFixed(1)} ETH
+        ~ {bitcoinBalance.toFixed(2)} BTC / {ethereumBalance.toFixed(1)} ETH
       </p>
 
       <div className="mt-8 pt-6 border-t border-slate-100 grid grid-cols-2 gap-4">

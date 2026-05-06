@@ -14,8 +14,7 @@ export function ProfileSettingsCard() {
 
   return (
     <div
-      className="col-span-12 md:col-span-8 bg-white p-md border border-slate-200 rounded-xl"
-      style={{ boxShadow: '0 4px 6px -1px rgba(15,23,42,0.05), 0 2px 4px -2px rgba(15,23,42,0.05)' }}
+      className="col-span-12 md:col-span-8 bg-white p-md border border-slate-200 rounded-xl card-shadow"
     >
       <div className="flex items-center gap-3 mb-md">
         <span className="material-symbols-outlined text-secondary">person</span>

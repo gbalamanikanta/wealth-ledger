@@ -1,20 +1,13 @@
 'use client';
 
-interface DistributionItem {
-  label: string;
-  pct: string;
-  color: string;
-}
-
-interface AssetDistributionChartProps {
-  items: DistributionItem[];
-  centerLabel: string;
-  centerValue: string;
-}
+import { useSelector } from 'react-redux';
+import { selectDistributionItems, selectBitcoinDistributionPct } from '@/store/selectors/cryptoSelectors';
 
 const CIRCLE_PATH = 'M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831';
 
-export function AssetDistributionChart({ items, centerLabel, centerValue }: AssetDistributionChartProps) {
+export function AssetDistributionChart() {
+  const items = useSelector(selectDistributionItems);
+  const btcPct = useSelector(selectBitcoinDistributionPct);
   let offset = 0;
 
   return (
@@ -51,8 +44,8 @@ export function AssetDistributionChart({ items, centerLabel, centerValue }: Asse
             })}
           </svg>
           <div className="absolute inset-0 flex items-center justify-center flex-col">
-            <span className="text-xs font-bold text-slate-400 uppercase">{centerLabel}</span>
-            <span className="text-sm font-black text-slate-900">{centerValue}%</span>
+            <span className="text-xs font-bold text-slate-400 uppercase">BTC</span>
+            <span className="text-sm font-black text-slate-900">{btcPct}%</span>
           </div>
         </div>
 
@@ -62,8 +55,8 @@ export function AssetDistributionChart({ items, centerLabel, centerValue }: Asse
             <div key={item.label} className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span
-                  className="w-2 h-2 rounded-full inline-block"
-                  style={{ backgroundColor: item.color }}
+                  className="w-2 h-2 rounded-full inline-block [background-color:var(--dot-color)]"
+                  style={{ '--dot-color': item.color } as React.CSSProperties}
                 />
                 <span className="text-xs font-semibold text-slate-600">{item.label}</span>
               </div>

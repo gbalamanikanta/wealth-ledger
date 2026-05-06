@@ -1,14 +1,12 @@
 'use client';
 
-import { CryptoAsset } from '@/store/slices/cryptoSlice';
+import { useSelector } from 'react-redux';
+import { selectAssets } from '@/store/selectors/cryptoSelectors';
 import { useCurrencyFormat } from '@/lib/useCurrencyFormat';
 
-interface HoldingsTableProps {
-  assets: CryptoAsset[];
-}
-
-export function HoldingsTable({ assets }: HoldingsTableProps) {
+export function HoldingsTable() {
   const { format } = useCurrencyFormat();
+  const assets = useSelector(selectAssets);
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl card-shadow mb-gutter">
@@ -42,12 +40,12 @@ export function HoldingsTable({ assets }: HoldingsTableProps) {
                 <td className="px-md py-4">
                   <div className="flex items-center gap-3">
                     <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: asset.color + '20' }}
+                      className="w-8 h-8 rounded-full flex items-center justify-center [background-color:var(--icon-bg)]"
+                      style={{ '--icon-bg': asset.color + '20' } as React.CSSProperties}
                     >
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: '20px', color: asset.color }}
+                        className="material-symbols-outlined text-xl [color:var(--icon-color)]"
+                        style={{ '--icon-color': asset.color } as React.CSSProperties}
                       >
                         {asset.icon}
                       </span>

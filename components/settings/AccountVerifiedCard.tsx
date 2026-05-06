@@ -3,8 +3,7 @@
 export function AccountVerifiedCard() {
   return (
     <div
-      className="col-span-12 md:col-span-4 bg-primary-container p-md border border-slate-200 rounded-xl overflow-hidden relative group"
-      style={{ boxShadow: '0 4px 6px -1px rgba(15,23,42,0.05), 0 2px 4px -2px rgba(15,23,42,0.05)' }}
+      className="col-span-12 md:col-span-4 bg-primary-container p-md border border-slate-200 rounded-xl overflow-hidden relative group card-shadow"
     >
       <div className="absolute inset-0 z-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -16,8 +15,7 @@ export function AccountVerifiedCard() {
       </div>
       <div className="relative z-10 flex flex-col h-full justify-between">
         <span
-          className="material-symbols-outlined text-white text-4xl"
-          style={{ fontVariationSettings: "'FILL' 1" }}
+          className="material-symbols-outlined text-white text-4xl icon-filled"
         >
           verified_user
         </span>

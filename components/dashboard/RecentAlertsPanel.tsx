@@ -5,6 +5,7 @@ import { AppDispatch } from '@/store';
 import { selectBudgetStatus } from '@/store/selectors/dashboardSelectors';
 import { clearNotifications } from '@/store/slices/notificationsSlice';
 import { selectRecentNotifications } from '@/store/selectors/notificationsSelectors';
+import { selectBitcoinCurrentPrice } from '@/store/selectors/cryptoSelectors';
 const ALERT_THEME = {
   info: {
     icon: 'info',
@@ -24,15 +25,15 @@ const ALERT_THEME = {
   },
 } as const;
 
-export function RecentAlertsPanel({ btcCurrentPrice }: { btcCurrentPrice?: number }) {
+export function RecentAlertsPanel() {
   const dispatch = useDispatch<AppDispatch>();
   const { monthlySpendingLimit, spentPct, isOverThreshold } = useSelector(selectBudgetStatus);
   const recentNotifications = useSelector(selectRecentNotifications);
+  const btcCurrentPrice = useSelector(selectBitcoinCurrentPrice);
 
   return (
     <div
-      className="bg-surface-container-lowest p-md border border-outline-variant rounded-xl"
-      style={{ boxShadow: '0 4px 6px -1px rgba(15,23,42,0.05), 0 2px 4px -2px rgba(15,23,42,0.05)' }}
+      className="bg-surface-container-lowest p-md border border-outline-variant rounded-xl card-shadow"
     >
       <div className="flex justify-between items-center mb-md">
         <h3 className="text-label-lg font-medium text-on-surface flex items-center gap-2">
@@ -78,8 +79,8 @@ export function RecentAlertsPanel({ btcCurrentPrice }: { btcCurrentPrice?: numbe
               </p>
               <div className="mt-2 w-full bg-surface-container rounded-full h-1">
                 <div
-                  className={`h-1 rounded-full transition-all ${isOverThreshold ? 'bg-error' : 'bg-secondary-container'}`}
-                  style={{ width: `${spentPct.toFixed(1)}%` }}
+                  className={`h-1 rounded-full transition-all [width:var(--w)] ${isOverThreshold ? 'bg-error' : 'bg-secondary-container'}`}
+                  style={{ '--w': `${spentPct.toFixed(1)}%` } as React.CSSProperties}
                 />
               </div>
             </div>

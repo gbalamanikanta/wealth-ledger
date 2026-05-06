@@ -1,24 +1,32 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { selectRawItems, selectFilter, selectLoading, selectTotalVolume } from '../slices/transactionsSlice';
 import type { Transaction } from '@/lib/fakerData';
+import type { TransactionFilter } from '../slices/transactionsSlice';
 
-// Filtered transactions with category, status, and amount filtering
+const DATE_RANGE_DAYS: Record<string, number> = { last7: 7, last30: 30, last60: 60 };
+
+// Filtered transactions with category, status, amount, and date range filtering
 export const selectFilteredTransactions = createSelector(
   [selectRawItems, selectFilter],
-  (items: Transaction[], filter) => {
+  (items: Transaction[], filter: TransactionFilter) => {
     let filtered = [...items];
 
     if (filter.category !== 'All Categories') {
-      filtered = filtered.filter((t: Transaction) => t.category === filter.category);
+      filtered = filtered.filter((t) => t.category === filter.category);
     }
 
     if (filter.status !== 'All') {
-      filtered = filtered.filter((t: Transaction) => t.status === filter.status);
+      filtered = filtered.filter((t) => t.status === filter.status);
     }
 
     if (filter.minAmount) {
       const minAmount = parseFloat(filter.minAmount);
-      filtered = filtered.filter((t: Transaction) => Math.abs(t.amount) >= minAmount);
+      filtered = filtered.filter((t) => Math.abs(t.amount) >= minAmount);
+    }
+
+    if (filter.dateRange && DATE_RANGE_DAYS[filter.dateRange]) {
+      const cutoff = new Date(Date.now() - DATE_RANGE_DAYS[filter.dateRange] * 86_400_000);
+      filtered = filtered.filter((t) => new Date(t.date) >= cutoff);
     }
 
     return filtered;

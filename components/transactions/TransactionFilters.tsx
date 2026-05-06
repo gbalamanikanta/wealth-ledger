@@ -7,6 +7,12 @@ import { selectFilter } from '@/store/selectors/transactionsSelectors';
 
 const CATEGORIES = ['All Categories', 'Equity Purchase', 'Crypto Transfer', 'Dividend', 'Institutional Fee', 'Fixed Income'];
 const STATUSES = ['All', 'Settled', 'Pending', 'Processing'];
+const DATE_RANGES = [
+  { value: '', label: 'All Dates' },
+  { value: 'last7', label: 'Last 7 Days' },
+  { value: 'last30', label: 'Last 30 Days' },
+  { value: 'last60', label: 'Last 60 Days' },
+];
 
 export function TransactionFilters() {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,7 +26,7 @@ export function TransactionFilters() {
           Advanced Filtering
         </h3>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         <div className="space-y-2">
           <label className="block text-label-sm font-semibold text-on-surface-variant px-1">Category</label>
           <select
@@ -54,6 +60,18 @@ export function TransactionFilters() {
             placeholder="$0.00"
             className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all"
           />
+        </div>
+        <div className="space-y-2">
+          <label className="block text-label-sm font-semibold text-on-surface-variant px-1">Date Range</label>
+          <select
+            value={filter.dateRange}
+            onChange={(e) => dispatch(setFilter({ dateRange: e.target.value }))}
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all"
+          >
+            {DATE_RANGES.map(({ value, label }) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+          </select>
         </div>
         <div className="flex items-end">
           <button

@@ -35,11 +35,11 @@ export function EquityCurveChart() {
           {BAR_HEIGHTS.map((h, i) => (
             <div
               key={i}
-              className="flex-1 rounded-t-sm"
+              className="flex-1 rounded-t-sm [height:var(--bar-h)] [background:var(--bar-bg)]"
               style={{
-                height: `${h}%`,
-                background: `linear-gradient(to top, #eff4ff, rgba(49,107,243,${0.2 + i * 0.08}))`,
-              }}
+                '--bar-h': `${h}%`,
+                '--bar-bg': `linear-gradient(to top, #eff4ff, rgba(49,107,243,${(0.2 + i * 0.08).toFixed(2)}))`,
+              } as React.CSSProperties}
             />
           ))}
         </div>

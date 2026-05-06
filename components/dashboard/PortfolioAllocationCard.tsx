@@ -24,8 +24,8 @@ export function PortfolioAllocationCard() {
               </div>
               <div className="w-full bg-white/10 rounded-full h-1">
                 <div
-                  className={`${colorClass} h-1 rounded-full transition-all duration-500`}
-                  style={{ width: `${pct.toFixed(1)}%` }}
+                  className={`${colorClass} h-1 rounded-full transition-all duration-500 [width:var(--w)]`}
+                  style={{ '--w': `${pct.toFixed(1)}%` } as React.CSSProperties}
                 />
               </div>
             </div>

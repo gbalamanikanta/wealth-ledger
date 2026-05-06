@@ -3,16 +3,18 @@ import { Transaction } from '@/lib/fakerData';
 import { fetchCryptoPrices } from './portfolioSlice';
 import type { RootState } from '../index';
 
+export interface TransactionFilter {
+  category: string;
+  status: string;
+  minAmount: string;
+  dateRange: string;
+}
+
 interface TransactionsState {
   items: Transaction[];
   loading: boolean;
   error: string | null;
-  filter: {
-    category: string;
-    status: string;
-    minAmount: string;
-    dateRange: string;
-  };
+  filter: TransactionFilter;
   totalVolume: number;
 }
 
