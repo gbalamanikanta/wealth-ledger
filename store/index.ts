@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { rootReducer } from './rootReducer';
-import { listenerMiddleware } from './listenerMiddleware';
+import { listenerMiddleware } from './middleware/listenerMiddleware';
 
 export const store = configureStore({
   reducer: rootReducer,

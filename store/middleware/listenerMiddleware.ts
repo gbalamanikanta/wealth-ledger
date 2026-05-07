@@ -1,9 +1,9 @@
 import { createListenerMiddleware, isAnyOf } from '@reduxjs/toolkit';
-import { addTransaction, fetchTransactions } from './slices/transactionsSlice';
-import { setPrimaryCurrency, setMonthlySpendingLimit, setAlertThreshold } from './slices/settingsSlice';
-import { addNotification } from './slices/notificationsSlice';
-import { selectBudgetStatus } from './selectors/dashboardSelectors';
-import type { RootState } from './rootReducer';
+import { addTransaction, fetchTransactions } from '../slices/transactionsSlice';
+import { setPrimaryCurrency, setMonthlySpendingLimit, setAlertThreshold } from '../slices/settingsSlice';
+import { addNotification } from '../slices/notificationsSlice';
+import { selectBudgetStatus } from '../selectors/dashboardSelectors';
+import type { RootState } from '../rootReducer';
 
 export const listenerMiddleware = createListenerMiddleware();
 

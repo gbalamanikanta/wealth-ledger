@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const COINGECKO_API_KEY = 'CG-Ga7VfAzB11Nupkrd18sbxcvR';
+const COINGECKO_API_KEY = process.env.COINGECKO_API_KEY ?? '';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
